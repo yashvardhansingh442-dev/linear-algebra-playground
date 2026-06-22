@@ -13,7 +13,8 @@ Implementing linear algebra concepts in Python while studying Gilbert Strang's c
 
 ## Progress
 
-- [ ] Matrix Addition
+- [x] Matrix Addition
+- [x] Matrix Subtraction
 - [ ] Matrix Multiplication
 - [ ] Determinant
 - [ ] Inverse
