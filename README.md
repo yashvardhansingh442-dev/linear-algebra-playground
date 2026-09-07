@@ -18,8 +18,8 @@ Strang's course builds linear algebra around **four fundamental subspaces** and 
 | 2 | Matrix Subtraction | Lecture 1 | ✅ Done |
 | 3 | Matrix Multiplication (dot-product, row-picture, column-picture) | Lecture 1–3 | ✅ Done |
 | 4 | Determinants (cofactor expansion) | Lecture 18–19 | ✅ Done |
-| 5 | Inverse Matrices (Gauss-Jordan method) | Lecture 3 | 🔲 Planned |
-| 6 | Gaussian Elimination (row echelon + back-substitution) | Lecture 2 | 🔲 Planned |
+| 5 | Inverse Matrices (Gauss-Jordan method) | Lecture 3 | ✅ Done |
+| 6 | Gaussian Elimination (row echelon + back-substitution) | Lecture 2 | ✅ Done |
 | 7 | Eigenvalues & Eigenvectors (characteristic polynomial, power iteration) | Lecture 21–22 | 🔲 Planned |
 
 ---
@@ -30,11 +30,11 @@ Strang's course builds linear algebra around **four fundamental subspaces** and 
 - [x] Matrix Subtraction
 - [x] Matrix Multiplication
 - [x] Determinant
-- [ ] Inverse
-- [ ] Gaussian Elimination
+- [x] Inverse
+- [x] Gaussian Elimination
 - [ ] Eigenvalues
 
-**Current focus:** Inverse Matrices (Gauss-Jordan method)
+**Current focus:** Eigenvalues & Eigenvectors (characteristic polynomial, power iteration)
 
 ---
 
@@ -46,7 +46,9 @@ linear-algebra-playground/
 ├── matrix_operations/
 │   ├── addition_subtraction.py    # matrix_add, matrix_subtract
 │   ├── multiplication.py          # dot-product, row-picture, column-picture views
-│   └── determinant.py             # cofactor expansion
+│   ├── determinant.py             # cofactor expansion
+│   ├── inverse_matrix.py          # Gauss-Jordan elimination
+│   └── gaussian_elimination.py    # solves Ax = b via row echelon + back-substitution
 │
 ├── .gitignore
 └── README.md
@@ -71,6 +73,8 @@ cd linear-algebra-playground
 python matrix_operations/addition_subtraction.py
 python matrix_operations/multiplication.py
 python matrix_operations/determinant.py
+python matrix_operations/inverse_matrix.py
+python matrix_operations/gaussian_elimination.py
 ```
 
 Each script is runnable standalone and prints output for each implementation approach alongside a NumPy check, matching how Strang works through problems in lecture.
