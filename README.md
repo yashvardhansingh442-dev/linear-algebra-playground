@@ -20,7 +20,7 @@ Strang's course builds linear algebra around **four fundamental subspaces** and 
 | 4 | Determinants (cofactor expansion) | Lecture 18–19 | ✅ Done |
 | 5 | Inverse Matrices (Gauss-Jordan method) | Lecture 3 | ✅ Done |
 | 6 | Gaussian Elimination (row echelon + back-substitution) | Lecture 2 | ✅ Done |
-| 7 | Eigenvalues & Eigenvectors (characteristic polynomial, power iteration) | Lecture 21–22 | 🔲 Planned |
+| 7 | Eigenvalues & Eigenvectors (characteristic polynomial, power iteration) | Lecture 21–22 | ✅ Done |
 
 ---
 
@@ -32,9 +32,9 @@ Strang's course builds linear algebra around **four fundamental subspaces** and 
 - [x] Determinant
 - [x] Inverse
 - [x] Gaussian Elimination
-- [ ] Eigenvalues
+- [x] Eigenvalues
 
-**Current focus:** Eigenvalues & Eigenvectors (characteristic polynomial, power iteration)
+**Current focus:** Core topics complete — see Roadmap below for what's next (visualizations, tests, SVD/least-squares)
 
 ---
 
@@ -48,7 +48,8 @@ linear-algebra-playground/
 │   ├── multiplication.py          # dot-product, row-picture, column-picture views
 │   ├── determinant.py             # cofactor expansion
 │   ├── inverse_matrix.py          # Gauss-Jordan elimination
-│   └── gaussian_elimination.py    # solves Ax = b via row echelon + back-substitution
+│   ├── gaussian_elimination.py    # solves Ax = b via row echelon + back-substitution
+│   └── eigen.py                   # characteristic polynomial (2x2, 3x3) + power iteration
 │
 ├── .gitignore
 └── README.md
@@ -75,6 +76,7 @@ python matrix_operations/multiplication.py
 python matrix_operations/determinant.py
 python matrix_operations/inverse_matrix.py
 python matrix_operations/gaussian_elimination.py
+python matrix_operations/eigen.py
 ```
 
 Each script is runnable standalone and prints output for each implementation approach alongside a NumPy check, matching how Strang works through problems in lecture.
@@ -104,6 +106,7 @@ Companion to MIT OpenCourseWare **18.06 Linear Algebra**
 - [ ] Add a shared `utils/` module (validation, printing helpers)
 - [ ] Add `tests/` validating manual implementations against NumPy
 - [ ] Add visualizations for each transformation (2D/3D) using Matplotlib
+- [ ] Extend `eigen.py`'s characteristic-polynomial method beyond 3x3, or generalize to complex eigenvalues
 - [ ] Extend to SVD and least-squares (Strang Ch. 7–8) as a stretch goal
 
 ---
