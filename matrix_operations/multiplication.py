@@ -1,0 +1,126 @@
+from .utils import as_matrix, shape, print_matrix
+
+
+def _validate(A, B):
+    """Shared validation for all multiplication views. Returns (A, B, dims)."""
+    A = as_matrix(A, "Matrix A")
+    B = as_matrix(B, "Matrix B")
+    rows_A, cols_A = shape(A)
+    rows_B, cols_B = shape(B)
+    if cols_A != rows_B:
+        raise ValueError(
+            f"Cannot multiply a {rows_A}x{cols_A} matrix "
+            f"with a {rows_B}x{cols_B} matrix."
+        )
+    return A, B, rows_A, cols_A, cols_B
+
+
+def matrix_multiply(A, B):
+    """
+    Multiply two matrices using the standard row·column dot-product view.
+    A: m x n matrix
+    B: n x p matrix
+    Returns:
+        m x p matrix
+    """
+    A, B, rows_A, cols_A, cols_B = _validate(A, B)
+
+    # Initialize result matrix with zeros
+    result = [[0] * cols_B for _ in range(rows_A)]
+
+    # Matrix multiplication
+    for i in range(rows_A):
+        for j in range(cols_B):
+            total = 0
+            for k in range(cols_A):
+                total += A[i][k] * B[k][j]
+            result[i][j] = total
+    return result
+
+
+def matrix_multiply_columns(A, B):
+    """
+    Column-picture view: each column of AB is a linear combination of
+    the columns of A, weighted by the corresponding column of B.
+
+    column_j(AB) = B[0][j]*col_0(A) + B[1][j]*col_1(A) + ... + B[n-1][j]*col_{n-1}(A)
+    """
+    A, B, rows_A, cols_A, cols_B = _validate(A, B)
+
+    result = [[0] * cols_B for _ in range(rows_A)]
+
+    for j in range(cols_B):
+        combo = [0] * rows_A
+        for k in range(cols_A):
+            weight = B[k][j]
+            for i in range(rows_A):
+                combo[i] += A[i][k] * weight
+        for i in range(rows_A):
+            result[i][j] = combo[i]
+    return result
+
+
+def matrix_multiply_rows(A, B):
+    """
+    Row-picture view: each row of AB is a linear combination of
+    the rows of B, weighted by the corresponding row of A.
+
+    row_i(AB) = A[i][0]*row_0(B) + A[i][1]*row_1(B) + ... + A[i][n-1]*row_{n-1}(B)
+    """
+    A, B, rows_A, cols_A, cols_B = _validate(A, B)
+
+    result = [[0] * cols_B for _ in range(rows_A)]
+
+    for i in range(rows_A):
+        combo = [0] * cols_B
+        for k in range(cols_A):
+            weight = A[i][k]
+            for j in range(cols_B):
+                combo[j] += weight * B[k][j]
+        result[i] = combo
+    return result
+
+
+# ---------------------- TEST ----------------------
+if __name__ == "__main__":
+    A = [
+        [1, 2],
+        [3, 4]
+    ]
+    B = [
+        [5, 6],
+        [7, 8]
+    ]
+
+    dot_result = matrix_multiply(A, B)
+    col_result = matrix_multiply_columns(A, B)
+    row_result = matrix_multiply_rows(A, B)
+
+    print_matrix(A, "Matrix A")
+    print_matrix(B, "\nMatrix B")
+    print_matrix(dot_result, "\nDot-product view result")
+    print_matrix(col_result, "\nColumn-picture view result")
+    print_matrix(row_result, "\nRow-picture view result")
+    print("\nAll views agree:", dot_result == col_result == row_result)
+
+    # Non-square example: (2x3) @ (3x2)
+    C = [[1, 0, 2], [0, 1, 3]]
+    D = [[1, 2], [3, 4], [5, 6]]
+    print_matrix(matrix_multiply(C, D), "\n(2x3) @ (3x2)")
+
+    # NumPy verification (optional)
+    try:
+        import numpy as np
+        print("\nNumPy Check:", np.matmul(A, B).tolist())
+        print("Results Match:", dot_result == np.matmul(A, B).tolist())
+        print("Non-square Match:",
+              matrix_multiply(C, D) == np.matmul(C, D).tolist())
+    except ImportError:
+        print("\nNumPy is not installed. Skipping verification.")
+
+    # Shape mismatch should raise
+    try:
+        matrix_multiply(C, C)
+        print("ERROR: should have raised")
+    except ValueError as e:
+        print("\nRaised correctly:", e)
