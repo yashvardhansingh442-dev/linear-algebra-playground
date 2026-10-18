@@ -1,4 +1,18 @@
+<<<<<<< HEAD
 from .utils import as_square_matrix, pivot_tolerance, print_matrix
+=======
+def _validate_square(M):
+    """Validate that M is a non-empty, rectangular, square matrix. Returns size n."""
+    if not M:
+        raise ValueError("Matrix cannot be empty.")
+    if any(len(row) != len(M[0]) for row in M):
+        raise ValueError("Matrix is not rectangular.")
+    rows = len(M)
+    cols = len(M[0])
+    if rows != cols:
+        raise ValueError(f"Determinant requires a square matrix, got {rows}x{cols}.")
+    return rows
+>>>>>>> 6d0f8c38f935ff7cdd49549d30a8d1417530f681
 
 
 def get_minor(M, i, j):
@@ -9,6 +23,7 @@ def get_minor(M, i, j):
     ]
 
 
+<<<<<<< HEAD
 def _cofactor_det(M):
     """Recursive cofactor expansion on an already-validated square matrix."""
     n = len(M)
@@ -22,6 +37,8 @@ def _cofactor_det(M):
     return det
 
 
+=======
+>>>>>>> 6d0f8c38f935ff7cdd49549d30a8d1417530f681
 def determinant(M):
     """
     Compute the determinant of a square matrix using cofactor expansion
@@ -32,6 +49,7 @@ def determinant(M):
         2x2 -> ad - bc
     Recursive case:
         det(M) = sum over j of (-1)^j * M[0][j] * det(minor(M, 0, j))
+<<<<<<< HEAD
 
     Exact for integer input, but O(n!) -- see determinant_elimination for
     the O(n^3) alternative.
@@ -70,6 +88,26 @@ def determinant_elimination(M, tol=None):
                 A[row][k] -= factor * A[col][k]
 
     return sign * det
+=======
+    """
+    n = _validate_square(M)
+
+    # Base case: 1x1 matrix
+    if n == 1:
+        return M[0][0]
+
+    # Base case: 2x2 matrix
+    if n == 2:
+        return M[0][0] * M[1][1] - M[0][1] * M[1][0]
+
+    # Recursive case: cofactor expansion along the first row
+    det = 0
+    for j in range(n):
+        sign = (-1) ** j
+        minor = get_minor(M, 0, j)
+        det += sign * M[0][j] * determinant(minor)
+    return det
+>>>>>>> 6d0f8c38f935ff7cdd49549d30a8d1417530f681
 
 
 # ---------------------- TEST ----------------------
@@ -91,6 +129,7 @@ if __name__ == "__main__":
     ]
 
     for name, M in [("A (2x2)", A), ("B (3x3)", B), ("C (4x4)", C)]:
+<<<<<<< HEAD
         print_matrix(M, f"Matrix {name}")
         result = determinant(M)
         fast = determinant_elimination(M)
@@ -103,14 +142,30 @@ if __name__ == "__main__":
             print(f"NumPy Check:                {round(float(numpy_result), 10)}")
             print("Results Match:", abs(result - numpy_result) < 1e-9
                   and abs(fast - numpy_result) < 1e-9)
+=======
+        print(f"Matrix {name}:")
+        for row in M:
+            print(row)
+        result = determinant(M)
+        print(f"Determinant: {result}")
+
+        try:
+            import numpy as np
+            numpy_result = round(np.linalg.det(M))
+            print(f"NumPy Check: {numpy_result}")
+            print("Results Match:", result == numpy_result)
+>>>>>>> 6d0f8c38f935ff7cdd49549d30a8d1417530f681
         except ImportError:
             print("NumPy is not installed. Skipping verification.")
         print()
 
+<<<<<<< HEAD
     # Singular matrix: rows 1 and 2 are proportional
     print("det of singular [[1,2],[2,4]]:",
           determinant([[1, 2], [2, 4]]), "/", determinant_elimination([[1, 2], [2, 4]]))
 
+=======
+>>>>>>> 6d0f8c38f935ff7cdd49549d30a8d1417530f681
     # Non-square matrix should raise
     try:
         determinant([[1, 2, 3], [4, 5, 6]])
