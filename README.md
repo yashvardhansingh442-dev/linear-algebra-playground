@@ -6,7 +6,6 @@
 
 [![CI](https://github.com/yashvardhansingh442-dev/linear-algebra-playground/actions/workflows/ci.yml/badge.svg)](https://github.com/yashvardhansingh442-dev/linear-algebra-playground/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
-![Tests](https://img.shields.io/badge/tests-134%20passing-brightgreen)
 ![Status](https://img.shields.io/badge/status-core%20topics%20complete-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
@@ -44,10 +43,10 @@ If you're also working through 18.06 or Strang's textbook, this repo doubles as 
 |---|---|
 | **Language** | Python 3.10+ |
 | **Runtime dependencies** | None (standard library only) |
-| **Test / demo dependencies** | `numpy`, `scipy` (`explorations/` only), `pytest` |
+| **Test / demo dependencies** | `numpy`, `scipy`, `pytest` (tests and `explorations/`) |
 | **Matrix format** | Plain list of lists, e.g. `[[1, 2], [3, 4]]` (NumPy arrays are accepted and converted) |
 | **Error style** | Fail loudly: `ValueError` with a specific message, never a silently wrong number |
-| **Tests** | 134, run on Python 3.10 / 3.11 / 3.12 in CI |
+| **Tests** | `pytest`, run on Python 3.10 / 3.11 / 3.12 in CI |
 
 **Why this repo exists.** Strang's course repeats one idea in every lecture: *matrices act on vectors*. It is easy to lose that intuition behind a single line like `A @ B` or `np.linalg.inv(A)`. Implementing row reduction, cofactor expansion and eigenvalue methods by hand makes the mechanics concrete: multiplication is a combination of columns, determinants measure volume scaling, elimination simplifies a transformation, and eigenvectors are the directions a matrix only stretches.
 
@@ -100,7 +99,7 @@ power_iteration(A)                  # (3.618, [...])  dominant eigenpair
 ### Run the tests
 
 ```bash
-python -m pytest            # all 134
+python -m pytest            # everything
 python -m pytest -k eigen   # just one module
 ```
 
@@ -360,7 +359,7 @@ Two complementary approaches, mirroring the two halves of Strang's treatment:
 
 ## 8. How Correctness Is Verified
 
-The `tests/` suite (134 tests, run in CI on Python 3.10–3.12) works at four levels:
+The `tests/` suite (run in CI on Python 3.10–3.12) works at four levels:
 
 1. **Against NumPy** — seeded random matrices of many sizes compared with `np.add`, `np.matmul`, `np.linalg.det`, `inv`, `solve`, `eigvalsh`.
 2. **Mathematical properties** — `A·A⁻¹ = I`, `(AB)⁻¹ = B⁻¹A⁻¹`, `det(AB) = det(A)det(B)`, `Av = λv` for every eigenpair, all three multiplication views agree.
@@ -405,7 +404,7 @@ Each module's `if __name__ == "__main__":` block remains the human-readable work
 - [ ] Reduced row echelon form, rank, and the four fundamental subspaces — Lectures 6–10
 - [ ] Matplotlib visualizations: eigenvector directions, determinant as area/volume
 - [ ] QR iteration for general eigenvalues (beyond 3×3, and complex)
-- [ ] SVD and least squares (Strang Ch. 7–8) — stretch goal
+- [ ] Least squares (Strang Sec. 4.3) and SVD (Ch. 7) — stretch goal
 
 ---
 
