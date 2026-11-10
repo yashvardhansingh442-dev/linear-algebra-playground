@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+message: "If you use this repository in your work or learning materials, please cite it using the metadata below."
+type: software
+title: "linear-algebra-playground"
+abstract: >-
+  An open educational repository for learning linear algebra. It follows the
+  progression of MIT 18.06 and pairs plain-language explanations, visual
+  notebooks, and exercises with from-scratch Python implementations that are
+  verified against NumPy.
+authors:
+  - given-names: "Yash"
+    family-names: "YOUR-FAMILY-NAME"
+    alias: "yashvardhansingh442-dev"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+    # email: "YOUR-EMAIL@example.com"
+repository-code: "https://github.com/yashvardhansingh442-dev/linear-algebra-playground"
+url: "https://github.com/yashvardhansingh442-dev/linear-algebra-playground"
+# Uncomment once your docs site is live:
+# url: "https://yashvardhansingh442-dev.github.io/linear-algebra-playground/"
+license: MIT
+version: 0.1.0
+date-released: 2026-11-10
+keywords:
+  - linear algebra
+  - education
+  - python
+  - numerical linear algebra
+  - matrix factorization
+  - eigenvalues
+  - singular value decomposition
+  - open educational resources
+references:
+  - type: book
+    title: "Introduction to Linear Algebra"
+    edition: "5"
+    authors:
+      - given-names: "Gilbert"
+        family-names: "Strang"
+    publisher:
+      name: "Wellesley-Cambridge Press"
+    year: 2016
+    notes: "Primary textbook behind the MIT 18.06 course that this repository follows."
