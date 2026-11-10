@@ -1,0 +1,23 @@
+# Controls the "New issue" chooser page on GitHub.
+# Docs: https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository
+
+# Require people to pick a template (bug report, explanation unclear, topic request)
+# instead of opening an empty issue. Set to true if you'd rather allow free-form issues.
+blank_issues_enabled: false
+
+contact_links:
+  - name: Ask a question or start a discussion
+    url: https://github.com/yashvardhansingh442-dev/linear-algebra-playground/discussions
+    about: For questions about the math, the code, or how to use the repo, ask here instead of opening an issue. (Enable Discussions in Settings first.)
+
+  - name: Read the documentation site
+    url: https://yashvardhansingh442-dev.github.io/linear-algebra-playground/
+    about: Lessons, glossary, learning path, and API reference. Your answer may already be there.
+
+  - name: Contributing guide
+    url: https://github.com/yashvardhansingh442-dev/linear-algebra-playground/blob/main/CONTRIBUTING.md
+    about: How to set up the project, write code or lessons, and open a pull request.
+
+  - name: Report a conduct concern
+    url: https://github.com/yashvardhansingh442-dev/linear-algebra-playground/blob/main/CODE_OF_CONDUCT.md#reporting
+    about: Please don't open a public issue for conduct problems. Follow the private reporting steps in the Code of Conduct.
