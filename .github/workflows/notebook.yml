@@ -1,0 +1,66 @@
+name: Notebooks
+
+# Executes every notebook in curriculum/ top to bottom on a fresh kernel.
+# If any cell raises an error, the job fails, so notebooks never silently rot.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "curriculum/**"
+      - "src/**"
+      - "data/**"
+      - "pyproject.toml"
+      - ".github/workflows/notebooks.yml"
+  pull_request:
+    paths:
+      - "curriculum/**"
+      - "src/**"
+      - "data/**"
+      - "pyproject.toml"
+      - ".github/workflows/notebooks.yml"
+  schedule:
+    # Weekly run (Monday 06:00 UTC) to catch breakage from new NumPy/Matplotlib releases
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+# Cancel an older run of the same branch/PR when a new commit arrives
+concurrency:
+  group: notebooks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  run-notebooks:
+    name: Run notebooks (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+
+    env:
+      MPLBACKEND: Agg          # headless Matplotlib, no display needed
+      PYTHONHASHSEED: "0"      # reproducible runs
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install package with notebook and dev dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev,notebooks]"
+
+      - name: Execute notebooks
+        run: pytest --nbmake --nbmake-timeout=300 curriculum/
