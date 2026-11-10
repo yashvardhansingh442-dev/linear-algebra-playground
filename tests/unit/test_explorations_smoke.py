@@ -10,7 +10,7 @@ import pytest
 pytest.importorskip("numpy")
 pytest.importorskip("scipy")
 
-SCRIPTS = sorted((Path(__file__).parent.parent / "explorations").glob("*.py"))
+SCRIPTS = sorted((Path(__file__).parent.parent.parent / "explorations").glob("*.py"))
 
 
 @pytest.mark.parametrize("script", SCRIPTS, ids=lambda p: p.name)

@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 - The library has no runtime dependencies; `numpy`/`scipy` moved to the `dev` extra.
+- Tests moved to `tests/unit/` (with `tests/property/` and `tests/numerical/` ready for Hypothesis and ill-conditioned-matrix tests).
 - Removed NumPy demo scripts that were byte-for-byte copies of files in `explorations/`; moved the NumPy-based engine to `explorations/linear_algebra_engine.py`.
 - Reorganized the flat module folder into a `src/linalg/` package with `core/`, `solvers/`, `spaces/`, and `decompositions/` subpackages.
 - Moved lesson-style scripts into `curriculum/` so that explanations are separate from reusable library code.
