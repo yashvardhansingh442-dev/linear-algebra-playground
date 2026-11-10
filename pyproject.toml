@@ -1,3 +1,183 @@
+# ---------------------------------------------------------------------------
+# Build system
+# ---------------------------------------------------------------------------
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# ---------------------------------------------------------------------------
+# Package metadata
+# ---------------------------------------------------------------------------
+[project]
+name = "linalg"
+version = "0.1.0"
+description = "Learn linear algebra by building it from scratch in Python, following MIT 18.06."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Yash YOUR-FAMILY-NAME" },  # add: email = "YOUR-EMAIL@example.com"
+]
+keywords = [
+    "linear algebra",
+    "education",
+    "numerical linear algebra",
+    "matrix factorization",
+    "eigenvalues",
+    "svd",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Education",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Typing :: Typed",
+]
+
+# Runtime dependencies (what `pip install -e .` installs)
+dependencies = [
+    "numpy>=1.26",
+    "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+# For running the curriculum notebooks
+notebooks = [
+    "jupyter",
+    "ipykernel",
+]
+# For contributors: testing, linting, typing, notebook hygiene
+dev = [
+    "pytest>=8.0",
+    "pytest-cov",
+    "hypothesis>=6.100",
+    "ruff",
+    "mypy",
+    "pre-commit",
+    "nbstripout",
+    "nbmake",
+]
+# For building the documentation site
+docs = [
+    "mkdocs-material",
+    "mkdocstrings[python]",
+    "mkdocs-jupyter",
+]
+# Everything at once
+all = [
+    "linalg[notebooks,dev,docs]",
+]
+
+[project.urls]
+Homepage = "https://github.com/yashvardhansingh442-dev/linear-algebra-playground"
+Repository = "https://github.com/yashvardhansingh442-dev/linear-algebra-playground"
+Issues = "https://github.com/yashvardhansingh442-dev/linear-algebra-playground/issues"
+Changelog = "https://github.com/yashvardhansingh442-dev/linear-algebra-playground/blob/main/CHANGELOG.md"
+
+# ---------------------------------------------------------------------------
+# Hatch: tell the build backend where the package lives (src layout)
+# ---------------------------------------------------------------------------
+[tool.hatch.build.targets.wheel]
+packages = ["src/linalg"]
+
+# ---------------------------------------------------------------------------
+# Ruff: linting and formatting
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+src = ["src", "tests"]
+extend-exclude = ["docs/_build", ".venv"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # import sorting
+    "B",    # flake8-bugbear (likely bugs)
+    "UP",   # pyupgrade (modern syntax)
+    "SIM",  # flake8-simplify
+    "NPY",  # NumPy-specific rules
+    "RUF",  # Ruff-specific rules
+    "N",    # pep8-naming
+]
+ignore = [
+    "N802",  # function names like `LU` are fine if they mirror math notation
+    "N803",  # uppercase argument names (A, B, Q) mirror math notation
+    "N806",  # uppercase variable names (L, U, P) mirror math notation
+    "RUF002",  # allow math symbols (λ, ×, ≈) in docstrings
+    "RUF003",  # allow math symbols in comments
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["B011"]                 # allow `assert False` in tests
+"curriculum/**" = ["E501", "T201"]    # lessons can have long lines and prints
+"**/__init__.py" = ["F401"]           # re-exports are intentional
+
+[tool.ruff.lint.isort]
+known-first-party = ["linalg"]
+
+[tool.ruff.format]
+quote-style = "double"
+docstring-code-format = true
+
+# ---------------------------------------------------------------------------
+# Pytest
+# ---------------------------------------------------------------------------
 [tool.pytest.ini_options]
+minversion = "8.0"
 testpaths = ["tests"]
-pythonpath = ["."]
+addopts = "-ra --strict-markers --strict-config"
+markers = [
+    "slow: tests that take a long time (deselect with -m 'not slow')",
+    "numerical: ill-conditioned and edge-case stability tests",
+    "property: Hypothesis property-based tests",
+]
+filterwarnings = [
+    "error",                       # treat warnings as errors to catch numerical issues early
+    "ignore::DeprecationWarning:jupyter_client.*",
+]
+
+# ---------------------------------------------------------------------------
+# Mypy: static type checking
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.10"
+files = ["src"]
+strict = true
+warn_unused_ignores = true
+warn_return_any = true
+disallow_untyped_defs = true
+plugins = ["numpy.typing.mypy_plugin"]
+
+[[tool.mypy.overrides]]
+module = ["matplotlib.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false
+
+# ---------------------------------------------------------------------------
+# Coverage
+# ---------------------------------------------------------------------------
+[tool.coverage.run]
+source = ["linalg"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
