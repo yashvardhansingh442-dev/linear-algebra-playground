@@ -1,0 +1,84 @@
+name: Docs
+
+# Builds the MkDocs site on every relevant change.
+# Pull requests only build (to catch broken links and docstrings).
+# Pushes to main also deploy the site to GitHub Pages.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - "src/**"
+      - "curriculum/**"
+      - "pyproject.toml"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - "src/**"
+      - "curriculum/**"
+      - "pyproject.toml"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+# Only one deployment at a time; don't cancel a deploy that is already running
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build docs
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      MPLBACKEND: Agg
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install package with docs dependencies
+        # Installing the package itself lets mkdocstrings import `linalg`
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[docs]"
+
+      - name: Build site (strict mode, warnings fail the build)
+        run: mkdocs build --strict
+
+      - name: Upload site artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write       # publish to Pages
+      id-token: write    # verify the deployment source
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
