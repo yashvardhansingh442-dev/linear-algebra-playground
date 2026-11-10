@@ -2,8 +2,8 @@ import math
 import warnings
 import random
 
-from .determinant import determinant
-from .utils import as_square_matrix, mat_vec, norm, max_abs, print_matrix
+from ..core.determinant import determinant
+from ..core.utils import as_square_matrix, mat_vec, norm, max_abs, print_matrix
 
 # Relative tolerance used to decide when roots of a polynomial coincide.
 _ROOT_TOL = 1e-12

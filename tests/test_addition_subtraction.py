@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from matrix_operations.addition_subtraction import matrix_add, matrix_subtract
+from linalg.core.addition_subtraction import matrix_add, matrix_subtract
 from tests.conftest import random_matrix
 
 

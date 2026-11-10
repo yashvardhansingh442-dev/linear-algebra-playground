@@ -11,7 +11,7 @@
 
 </div>
 
-A from-scratch implementation of core linear algebra algorithms, built while working through **Gilbert Strang's *Introduction to Linear Algebra*** (MIT 18.06). Every algorithm in [`matrix_operations/`](matrix_operations) uses plain Python lists and loops — no `numpy.linalg`, no NumPy at all in the library code. NumPy and SciPy appear only to **check the answers** (in the tests and in each script's demo block) and in the [`explorations/`](explorations) experiments.
+A from-scratch implementation of core linear algebra algorithms, built while working through **Gilbert Strang's *Introduction to Linear Algebra*** (MIT 18.06). Every algorithm in [`src/linalg/`](src/linalg) uses plain Python lists and loops — no `numpy.linalg`, no NumPy at all in the library code. NumPy and SciPy appear only to **check the answers** (in the tests and in each script's demo block) and in the [`explorations/`](explorations) experiments.
 
 If you're also working through 18.06 or Strang's textbook, this repo doubles as a study log: each module runs on its own, prints its work step by step, and states which lecture the concept comes from.
 
@@ -59,32 +59,32 @@ If you're also working through 18.06 or Strang's textbook, this repo doubles as 
 ```bash
 git clone https://github.com/yashvardhansingh442-dev/linear-algebra-playground.git
 cd linear-algebra-playground
-pip install -r requirements-dev.txt     # numpy, scipy, pytest
+pip install -e ".[dev]"     # installs `linalg` + numpy, scipy, pytest
 ```
 
 The algorithms themselves need only the standard library; the install above is for verification, tests and `explorations/`.
 
 ### Run a worked example
 
-Each module has a `__main__` block that prints its steps and cross-checks NumPy. Run them **from the repo root** with `-m` (the modules share `utils.py`, so running the file path directly won't work):
+Each module has a `__main__` block that prints its steps and cross-checks NumPy. Run them with `-m` (the modules share `utils.py`, so running the file path directly won't work):
 
 ```bash
-python -m matrix_operations.addition_subtraction
-python -m matrix_operations.multiplication
-python -m matrix_operations.determinant
-python -m matrix_operations.matrix_inverse
-python -m matrix_operations.gaussian_elimination
-python -m matrix_operations.eigen
+python -m linalg.core.addition_subtraction
+python -m linalg.core.multiplication
+python -m linalg.core.determinant
+python -m linalg.solvers.matrix_inverse
+python -m linalg.solvers.gaussian_elimination
+python -m linalg.decompositions.eigen
 ```
 
 ### Use it as a library
 
 ```python
-from matrix_operations.multiplication import matrix_multiply
-from matrix_operations.determinant import determinant, determinant_elimination
-from matrix_operations.gaussian_elimination import solve
-from matrix_operations.matrix_inverse import inverse
-from matrix_operations.eigen import eigen, power_iteration
+from linalg.core.multiplication import matrix_multiply
+from linalg.core.determinant import determinant, determinant_elimination
+from linalg.solvers.gaussian_elimination import solve
+from linalg.solvers.matrix_inverse import inverse
+from linalg.decompositions.eigen import eigen, power_iteration
 
 A = [[2, 1], [1, 3]]
 
@@ -131,15 +131,17 @@ multiplication.py  ◄── matrix_inverse.py demo only (to show A·A⁻¹ = I)
 ```
 linear-algebra-playground/
 │
-├── matrix_operations/              # from-scratch library (pure Python)
-│   ├── __init__.py
-│   ├── utils.py                    # validation, tolerances, mat-vec, printing
-│   ├── addition_subtraction.py     # matrix_add, matrix_subtract
-│   ├── multiplication.py           # dot-product, column-picture, row-picture
-│   ├── determinant.py              # cofactor expansion + elimination
-│   ├── gaussian_elimination.py     # solve Ax = b
-│   ├── matrix_inverse.py           # Gauss-Jordan inverse
-│   └── eigen.py                    # char. polynomial, eigenspaces, power iteration
+├── src/linalg/                     # from-scratch library (pure Python)
+│   ├── core/
+│   │   ├── utils.py                # validation, tolerances, mat-vec, printing
+│   │   ├── addition_subtraction.py # matrix_add, matrix_subtract
+│   │   ├── multiplication.py       # dot-product, column-picture, row-picture
+│   │   └── determinant.py          # cofactor expansion + elimination
+│   ├── solvers/
+│   │   ├── gaussian_elimination.py # solve Ax = b
+│   │   └── matrix_inverse.py       # Gauss-Jordan inverse
+│   └── decompositions/
+│       └── eigen.py                # char. polynomial, eigenspaces, power iteration
 │
 ├── explorations/                   # NumPy / SciPy experiments (not from-scratch)
 │   ├── README.md                   # what each script explores
@@ -157,14 +159,12 @@ linear-algebra-playground/
 │   └── test_explorations_smoke.py  # every exploration script must still run
 │
 ├── .github/workflows/ci.yml        # pytest on Python 3.10 – 3.12
-├── pyproject.toml                  # pytest configuration
-├── requirements.txt                # numpy, scipy
-├── requirements-dev.txt            # + pytest
-├── license.md
+├── pyproject.toml                  # package metadata, pytest/ruff/mypy config
+├── LICENSE
 └── README.md
 ```
 
-> **`matrix_operations/` vs `explorations/`:** the first is the from-scratch library; the second is a scratchpad that *deliberately* uses `numpy.linalg` / `scipy.linalg` to see an idea before or after implementing it by hand.
+> **`src/linalg/` vs `explorations/`:** the first is the from-scratch library; the second is a scratchpad that *deliberately* uses `numpy.linalg` / `scipy.linalg` to see an idea before or after implementing it by hand.
 
 ---
 
@@ -411,13 +411,13 @@ Each module's `if __name__ == "__main__":` block remains the human-readable work
 ## 12. FAQ / Troubleshooting
 
 **`ImportError: attempted relative import with no known parent package`**
-You ran a file path directly. Run from the repo root as a module: `python -m matrix_operations.eigen`.
+You ran a file path directly. Run it as a module: `python -m linalg.decompositions.eigen`.
 
-**`ModuleNotFoundError: No module named 'matrix_operations'`**
-You're not in the repo root. `cd` into the folder that contains `matrix_operations/` first.
+**`ModuleNotFoundError: No module named 'linalg'`**
+The package isn't installed. From the repo root run `pip install -e .` (or `pip install -e ".[dev]"`).
 
 **`ModuleNotFoundError: No module named 'numpy'` / `'scipy'`**
-Only the verification steps and `explorations/` need them: `pip install -r requirements-dev.txt`.
+Only the verification steps and `explorations/` need them: `pip install -e ".[dev]"`.
 
 **`ValueError: Matrix is singular`**
 `solve` / `inverse` found no usable pivot. The matrix has dependent rows, or is so close to it that floating point can't tell. Pass a smaller `tol=` only if you're sure it's merely ill-conditioned.

@@ -9,7 +9,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 - `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, and `CITATION.cff` community and citation files.
 
+### Fixed
+- Resolved leftover merge-conflict markers in `multiplication`, `addition_subtraction`, `determinant`, `gaussian_elimination` and `matrix_inverse` (kept the validated, `utils`-based versions).
+- Tests, README, CI and the demo `-m` commands now point at the `linalg` package instead of the removed `matrix_operations/` folder; `solvers/` and `decompositions/` now live inside `src/linalg/` so they ship in the wheel.
+- CI installs via `pip install -e ".[dev]"` (the old `requirements-dev.txt` no longer exists).
+
 ### Changed
+- The library has no runtime dependencies; `numpy`/`scipy` moved to the `dev` extra.
+- Removed NumPy demo scripts that were byte-for-byte copies of files in `explorations/`; moved the NumPy-based engine to `explorations/linear_algebra_engine.py`.
 - Reorganized the flat module folder into a `src/linalg/` package with `core/`, `solvers/`, `spaces/`, and `decompositions/` subpackages.
 - Moved lesson-style scripts into `curriculum/` so that explanations are separate from reusable library code.
 

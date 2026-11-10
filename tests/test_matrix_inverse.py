@@ -1,8 +1,8 @@
 import numpy as np
 import pytest
 
-from matrix_operations.matrix_inverse import inverse
-from matrix_operations.multiplication import matrix_multiply
+from linalg.solvers.matrix_inverse import inverse
+from linalg.core.multiplication import matrix_multiply
 from tests.conftest import random_matrix
 
 

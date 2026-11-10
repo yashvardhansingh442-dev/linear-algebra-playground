@@ -3,14 +3,14 @@ import warnings
 import numpy as np
 import pytest
 
-from matrix_operations.eigen import (
+from linalg.decompositions.eigen import (
     characteristic_polynomial,
     eigen,
     eigenspace,
     eigenvalues,
     power_iteration,
 )
-from matrix_operations.utils import mat_vec
+from linalg.core.utils import mat_vec
 
 
 def assert_valid_pairs(A, vals, vecs):

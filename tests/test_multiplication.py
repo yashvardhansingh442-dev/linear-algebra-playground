@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from matrix_operations.multiplication import (
+from linalg.core.multiplication import (
     matrix_multiply,
     matrix_multiply_columns,
     matrix_multiply_rows,

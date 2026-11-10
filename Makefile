@@ -8,7 +8,7 @@ PIP    := $(PYTHON) -m pip
 .DEFAULT_GOAL := help
 
 .PHONY: help install install-dev install-all hooks \
-        test test-unit test-property test-numerical test-fast doctest notebooks cov \
+        test test-fast doctest notebooks cov \
         lint format format-check typecheck check \
         docs docs-serve bench build clean
 
@@ -41,15 +41,6 @@ hooks:  ## Install pre-commit git hooks
 # ---------------------------------------------------------------------------
 test:  ## Run the full test suite
 	pytest
-
-test-unit:  ## Run fast, hand-verified unit tests
-	pytest tests/unit
-
-test-property:  ## Run Hypothesis property-based tests
-	pytest tests/property
-
-test-numerical:  ## Run numerical stability and edge-case tests
-	pytest tests/numerical
 
 test-fast:  ## Run everything except slow tests
 	pytest -m "not slow"
@@ -91,8 +82,8 @@ docs:  ## Build the documentation site
 docs-serve:  ## Serve docs locally with live reload
 	mkdocs serve -f docs/mkdocs.yml
 
-bench:  ## Run benchmarks against NumPy
-	$(PYTHON) benchmarks/your_impl_vs_numpy.py
+bench:  ## Run the solver benchmark (NumPy/SciPy vs each other)
+	$(PYTHON) explorations/solver_benchmark.py
 
 build:  ## Build the sdist and wheel
 	$(PYTHON) -m build

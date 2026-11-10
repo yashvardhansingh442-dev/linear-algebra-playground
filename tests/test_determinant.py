@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from matrix_operations.determinant import determinant, determinant_elimination
+from linalg.core.determinant import determinant, determinant_elimination
 from tests.conftest import random_matrix
 
 

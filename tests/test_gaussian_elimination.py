@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from matrix_operations.gaussian_elimination import (
+from linalg.solvers.gaussian_elimination import (
     back_substitution,
     forward_elimination,
     solve,
